@@ -21,6 +21,18 @@
 
 [index.html](/Users/yskmjp/Documents/codex/portfolio-simulator/web/index.html) をブラウザで開いて使えます。
 
+## GitHub Pages
+
+このプロジェクトは GitHub Pages でそのまま公開できます。`main` へ push すると、[deploy-pages.yml](/Users/yskmjp/Documents/codex/portfolio-simulator/.github/workflows/deploy-pages.yml) が `web/` ディレクトリを静的サイトとしてデプロイします。
+
+最初の1回だけ、GitHub 側で次を確認してください。
+
+1. リポジトリの `Settings`
+2. `Pages`
+3. `Build and deployment` の `Source` を `GitHub Actions` にする
+
+公開後の URL は通常 `https://yskmjp.github.io/codex-portfolio/` です。
+
 実データを使う流れ:
 
 1. 各資産の `公式データを開く` を押す
