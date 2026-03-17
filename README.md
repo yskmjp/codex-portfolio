@@ -1,6 +1,6 @@
 # 資産ポートフォリオシミュレータ
 
-6資産クラスを対象に、制約付きのモンテカルロ法で効率的フロンティアを近似するツールです。
+6資産クラスを対象に、制約付きのモンテカルロ法で効率的フロンティアを近似するツールです。Web 版は GitHub Pages からそのまま使えます。
 
 対象資産:
 
@@ -13,9 +13,10 @@
 
 ## できること
 
-- リスク・リターン散布図の生成
-- 効率的フロンティアの描画
-- 許容リスクごとに最大期待リターンとなる資産配分の CSV 出力
+- 効率的フロンティアのグラフ表示
+- 投資信託ベースと代表インデックスベースの比較表示
+- 実データから計算した相関行列の表示
+- グラフ内での最適配分・期待リターン表示
 
 ## Web 版の使い方
 
@@ -31,7 +32,7 @@
 2. `Pages`
 3. `Build and deployment` の `Source` を `GitHub Actions` にする
 
-公開後の URL は通常 `https://yskmjp.github.io/codex-portfolio/` です。
+公開 URL: [https://yskmjp.github.io/codex-portfolio/](https://yskmjp.github.io/codex-portfolio/)
 
 実データを使う流れ:
 
@@ -55,10 +56,9 @@
 - 許容最大リスク、シミュレーション回数、刻み数、乱数シードを入力
 - 公式の `chart_data_*.js` を読み込み、相関係数、期待リターン、ボラティリティを再計算
 - 保存ファイルの期間が短い場合は、日次リターンの短期データから年率換算で推計
-- 効率的フロンティアのグラフ表示
-- 許容リスクごとの最適配分テーブル表示
-- 相関行列の表示
-- CSV ダウンロード
+- 投資信託ベースと代表インデックスベースの効率的フロンティアを上下比較
+- 投資信託ベースと代表インデックスベースの相関を上下比較
+- 代表インデックス前提の参考情報表示
 
 採用しているファンド:
 
@@ -73,7 +73,17 @@
 
 - サーバーは不要です
 - 実データはブラウザ内だけで処理し、永続保存しません
-- eMAXIS Slim そのものの時系列ページを使います
+- eMAXIS Slim そのものの履歴ファイルを優先して使います
+
+## ディレクトリ構成
+
+- [web](/Users/yskmjp/Documents/codex/portfolio-simulator/web): 公開用の静的フロントエンド
+- [scripts](/Users/yskmjp/Documents/codex/portfolio-simulator/scripts): Python の補助スクリプトとローカル用ツール
+- [tests](/Users/yskmjp/Documents/codex/portfolio-simulator/tests): 簡易テスト
+- [data](/Users/yskmjp/Documents/codex/portfolio-simulator/data): 整形済みデータ
+- [raw_data](/Users/yskmjp/Documents/codex/portfolio-simulator/raw_data): 生データ置き場
+- [output](/Users/yskmjp/Documents/codex/portfolio-simulator/output): Python 版の出力
+- [test_output](/Users/yskmjp/Documents/codex/portfolio-simulator/test_output): テスト出力
 
 ## Python 版の実行方法
 
@@ -102,5 +112,5 @@ Python 版では `output/` 配下に次のファイルを生成します。
 
 ## 前提
 
-- 期待リターン、ボラティリティ、相関係数は `portfolio_simulator.py` 内で仮定値を設定しています
+- 期待リターン、ボラティリティ、相関係数は [portfolio_simulator.py](/Users/yskmjp/Documents/codex/portfolio-simulator/scripts/portfolio_simulator.py) 内で仮定値を設定しています
 - 実際の市場データに合わせたい場合は `ASSETS` と `CORRELATION` を更新してください
