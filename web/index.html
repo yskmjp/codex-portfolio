@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>資産ポートフォリオシミュレータ</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Portfolio Lab</p>
+          <h1>資産ポートフォリオシミュレータ</h1>
+          <p class="hero-text">
+            日本株式、日本債券、先進国株式、先進国債券、新興国株式、新興国債券の6資産について、
+            許容リスクに応じた最大期待リターンの配分をその場で試算できます。
+          </p>
+        </div>
+        <div class="hero-metrics">
+          <div class="metric-card">
+            <span>対象資産</span>
+            <strong>6クラス</strong>
+          </div>
+          <div class="metric-card">
+            <span>計算方式</span>
+            <strong>モンテカルロ</strong>
+          </div>
+          <div class="metric-card">
+            <span>出力</span>
+            <strong>グラフ + 配分表</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel controls">
+          <div class="panel-heading">
+            <h2>入力条件</h2>
+            <p>各資産の最小・最大配分と、許容最大リスクを設定します。</p>
+          </div>
+
+          <form id="simulator-form">
+            <div class="panel-subheading">
+              <h3>実データの準備</h3>
+              <p>三菱UFJアセットマネジメント公式の履歴データファイルを4本保存して選択してください。データは保存されず、この画面内だけで使います。</p>
+            </div>
+            <div class="save-steps">
+              <strong>保存手順</strong>
+              <p>1. 各資産のリンクを開く  2. 取得できる形式でファイルを保存する  3. この画面で6ファイルを選んで `ファイル読込` を押す</p>
+              <p>eMAXIS Slim の既存4資産は公式 `chart_data_*.js` を推奨し、新興国株式・新興国債券は公式ページから取得した CSV か保存HTMLを読み込めるようにしています。</p>
+            </div>
+            <div id="data-downloads" class="download-grid"></div>
+
+            <div id="asset-inputs" class="asset-grid"></div>
+
+            <div class="global-grid">
+              <label class="field">
+                <span>許容できる最大リスク</span>
+                <div class="input-with-suffix">
+                  <input id="max-risk" type="number" min="0" max="100" step="0.1" value="15" />
+                  <span>%</span>
+                </div>
+              </label>
+
+              <label class="field">
+                <span>シミュレーション回数</span>
+                <input id="simulations" type="number" min="1000" max="100000" step="1000" value="20000" />
+              </label>
+
+              <label class="field">
+                <span>許容リスクの刻み数</span>
+                <input id="steps" type="number" min="2" max="30" step="1" value="12" />
+              </label>
+
+              <label class="field">
+                <span>乱数シード</span>
+                <input id="seed" type="number" min="1" step="1" value="42" />
+              </label>
+            </div>
+
+            <div class="actions">
+              <button type="button" id="fetch-data-button" class="secondary-button">ファイル読込</button>
+              <button type="submit" class="primary-button">シミュレーション実行</button>
+              <button type="button" id="reset-button" class="secondary-button">初期値に戻す</button>
+            </div>
+            <p id="message" class="message" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="panel results">
+          <div class="panel-heading">
+            <h2>効率的フロンティア</h2>
+            <p>上は投資信託の実データ、下は代表インデックス前提です。同じ6資産・同じ制約条件で比較できます。</p>
+          </div>
+          <div id="market-meta" class="market-meta"></div>
+          <div class="chart-compare">
+            <div>
+              <h3 class="chart-title">投資信託ベース</h3>
+              <div id="chart" class="chart-frame"></div>
+            </div>
+            <div>
+              <h3 class="chart-title">代表インデックスベース</h3>
+              <div id="benchmark-chart" class="chart-frame"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel correlations">
+          <div class="panel-heading">
+            <h2>相関比較</h2>
+            <p>上は投資信託の実データ、下は代表インデックス前提の相関です。</p>
+          </div>
+          <div class="correlation-stack">
+            <div>
+              <h3 class="chart-title">投資信託ベース</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead id="correlation-head"></thead>
+                  <tbody id="correlation-body"></tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <h3 class="chart-title">代表インデックスベース</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead id="benchmark-correlation-head"></thead>
+                  <tbody id="benchmark-correlation-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel references">
+          <div class="panel-heading">
+            <h2>参考情報</h2>
+            <p>代表インデックスベースのグラフは、下記の代表指数とコード内の年率前提値から計算しています。</p>
+          </div>
+          <div id="benchmark-reference" class="reference-box"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
